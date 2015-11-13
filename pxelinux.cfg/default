@@ -1,0 +1,62 @@
+DEFAULT      vesamenu.c32
+PROMPT       0
+ 
+MENU TITLE BOSS PXE by QdB
+MENU INCLUDE pxelinux.cfg/graphics.conf
+MENU AUTOBOOT Starting Local System in 8 seconds
+
+LABEL Copywipe
+	Menu LABEL ^1. CopyWipe - Wipe yo disk
+	menu default
+	timeout 0
+	TOTALTIMEOUT 0
+	KERNEL Memdisk
+	initrd images\Utilities\HardDrive\Wipe\CopyWipe\CopyWipe.ISO
+	append iso raw
+
+LABEL wds
+	MENU LABEL ^2. Ghost - Ghost yo disk
+	KERNEL pxeboot.0
+
+LABEL AcronisSD3
+	Menu LABEL ^3. Acronix - Deploy yo disk
+	KERNEL Memdisk
+	initrd images\ImageDeploy\Acronis\SnapDeploy\3\snapdeploy.iso
+	append iso raw
+	
+LABEL AcronisMIC
+	Menu LABEL ^4. Acronix Master Image Creator - Capture yo disk
+	KERNEL Memdisk
+	initrd images\ImageDeploy\Acronis\masterImageCreator\masterImageCreater.iso
+	append iso raw
+
+LABEL HDAT2
+	Menu LABEL ^5. HDAT2_v50 Check yo disk
+	KERNEL Memdisk
+	initrd images\Utilities\HardDrive\Check\HDAT2\hdat2.imz
+
+LABEL GParted
+	Menu LABEL ^6. GParted - Partition yo disk
+	KERNEL images\Utilities\HardDrive\Partition\GParted\live\vmlinuz
+	initrd images\Utilities\HardDrive\Partition\GParted\live\initrd.img
+	append boot=live config noswap locales=en_US.UTF-8 keyboard-layouts=us kbd=us gl_batch ip= fetch=tftp://172.16.0.5/filesystem.squashfs
+
+LABEL DBAN
+	Menu LABEL ^7. Free Money - USE AT YOUR OWN RISK
+	KERNEL images\Utilities\HardDrive\Wipe\DBAN\dban.bzi
+	append nuke="dwipe --autonuke --method quick" silent
+
+LABEL bootlocal
+	menu label ^8. Boot Normally - Boot yo disk
+	localboot 0
+	
+LABEL Abort
+	MENU LABEL ^9. Exit - Forget yo disk
+	KERNEL abortpxe.0
+	
+LABEL Ubuntu 15.10
+	Menu LABEL 10. Ubuntu 15.10 net Installer
+    prompt 0
+    timeout 0
+	KERNEL images/netboot/ubuntu-installer/amd64/linux
+	initrd images/netboot/ubuntu-installer/amd64/initrd.gz
